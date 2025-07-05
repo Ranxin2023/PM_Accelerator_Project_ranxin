@@ -95,3 +95,21 @@ Built using **React (Create React App)**. It collects user input, interacts with
         ]
     }
     ```
+
+## Project Structure
+### backend
+```
+backend/
+├── routes/
+│   ├── autofill.js
+│   ├── score.js
+│   ├── answers.js
+│   └── dashboard.js
+├── models/
+│   ├── User.js
+│   └── Application.js
+├── index.js
+├── .env
+└── ai/
+    └── deepseek.js
+```
