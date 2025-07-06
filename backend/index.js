@@ -18,6 +18,7 @@ app.use('/api/upload', require('./routes/upload'));
 // app.use('/api/resume', require('./routes/score'));
 // app.use('/api/answers', require('./routes/answers'));
 app.use('/api/applications', require('./routes/dashboard'));
+app.use('/api/manuallyfill', require('./routes/manuallyfill'));
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
