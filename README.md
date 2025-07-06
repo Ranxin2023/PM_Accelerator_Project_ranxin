@@ -96,14 +96,46 @@ Built using **React (Create React App)**. It collects user input, interacts with
     ```
 
 ## Project Structure
+### frontend
+```
+src/
+│
+├── components/             # Reusable UI components
+│   ├── AuthLeftPanel.jsx   # Left panel for auth screens (Signup/Login)
+│   └── Navbar.jsx          # Top navigation bar
+│
+├── context/                # Global React Contexts
+│   └── UserContext.jsx     # User state context for login/session
+│
+├── pages/                  # Top-level route views
+│   ├── ManuallyFill/       # Multi-step manual form input pages
+│   │   └── step1.jsx        # Step 1: Role preference selection
+│   ├── ForgotPassword.jsx  # Forgot password page
+│   ├── HomePage.jsx        # Main dashboard/homepage after login
+│   ├── SelectInputMethod.jsx # User picks upload vs manual form
+│   ├── Signup.jsx          # Signup form
+│   └── Welcome.jsx         # Welcome/Login screen
+│
+├── App.jsx                 # Root component, defines router layout
+├── App.css                 # Global CSS
+├── index.css               # Tailwind or reset styles
+├── main.jsx                # Entry point, ReactDOM render logic
+├── logo.svg                # App logo
+├── reportWebVitals.js      # Performance monitoring (optional)
+├── setupTests.js           # Test setup file for Jest/React Testing Library
+└── App.test.js             # App-level unit test (sample)
+
+```
 ### backend
 ```
 backend/
 ├── routes/
 │   ├── autofill.js
-│   ├── score.js
 │   ├── answers.js
 │   └── dashboard.js
+│   ├── manuallyfill.js
+│   ├── score.js
+│   └── upload.js
 ├── models/
 │   ├── User.js
 │   └── Application.js
