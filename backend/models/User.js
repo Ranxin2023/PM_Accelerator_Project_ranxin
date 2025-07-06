@@ -15,6 +15,7 @@ const userSchema = new mongoose.Schema({
     contentType: String,
     uploadDate: Date,
   },
+  preferences: [String],
 });
 
 module.exports = mongoose.model("User", userSchema);

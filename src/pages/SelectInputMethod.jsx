@@ -68,7 +68,7 @@ export default function SelectInputMethod() {
         <div className="bg-gray-50 rounded-2xl shadow-lg p-10 w-96 flex flex-col text-xl">
         <h2 className="text-2xl font-semibold mb-32">Fill Form Manually</h2>
         <button
-            onClick={() => navigate("/manual-fill")}
+            onClick={() => navigate("/manually-fill-step1")}
             className="bg-black text-white text-lg font-medium rounded-xl py-3 hover:bg-gray-900"
         >
             Continue
