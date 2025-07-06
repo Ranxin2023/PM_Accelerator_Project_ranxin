@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import {useState} from 'react'
+import {useState, useEffect} from 'react'
 import { useUser } from "../context/UserContext";
 import Navbar from "../components/Navbar";
 export default function SelectInputMethod() {
@@ -7,6 +7,13 @@ export default function SelectInputMethod() {
     const [resumeFile, setResumeFile] = useState(null);
     const [uploadSuccess, setUploadSuccess] = useState("");
     const { user } = useUser();
+    useEffect(() => {
+        if (!user) {
+        //   alert("Please sign in to continue.");
+        navigate("/");
+        }
+    }, [user, navigate]);
+
     const email = user?.email;
     const handleResumeChange=(e)=>{
         setResumeFile(e.target.files[0])

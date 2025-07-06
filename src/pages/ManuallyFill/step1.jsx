@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../../context/UserContext";
 const valuesList = [
@@ -20,6 +20,12 @@ export default function ManuallyStep1(){
     const [error, setError] = useState("");
     const navigate = useNavigate();
     const { user } = useUser();
+    useEffect(() => {
+            if (!user) {
+            //   alert("Please sign in to continue.");
+            navigate("/");
+            }
+    }, [user, navigate]);
     const email = user?.email;
     const toggleSelection = (value) => {
     if (selectedValues.includes(value)) {
