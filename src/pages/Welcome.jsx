@@ -2,13 +2,15 @@ import  {useState} from "react";
 import { FaGoogle, FaApple, FaFacebookF } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import AuthLeftPanel from "../components/AuthLeftPanel";
-
+import { useUser } from "../context/UserContext";
 
 export default function Welcome() {
   const navigate = useNavigate();
-   const [email, setEmail] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const { setUser } = useUser();
+
   const handleSignIn = async () => {
      try {
       const res = await fetch("http://localhost:5000/api/auth/login", {
@@ -22,7 +24,8 @@ export default function Welcome() {
       const data = await res.json();
 
       if (res.ok) {
-        console.log("Login successful:", data);
+        // console.log("Login successful:", data);
+        setUser({ email:email })
         navigate("/select-input-method");
       } else {
         setError(data.message || "Login failed");
