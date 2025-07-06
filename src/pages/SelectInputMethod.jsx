@@ -1,29 +1,70 @@
 import { useNavigate } from "react-router-dom";
+import {useState} from 'react'
+import { useUser } from "../context/UserContext";
 import Navbar from "../components/Navbar";
-
 export default function SelectInputMethod() {
-  const navigate = useNavigate();
+    const navigate = useNavigate();
+    const [resumeFile, setResumeFile] = useState(null);
+    const [uploadSuccess, setUploadSuccess] = useState("");
+    const { user } = useUser();
+    const email = user?.email;
+    const handleResumeChange=(e)=>{
+        setResumeFile(e.target.files[0])
+    }
+    const handleResumeUpload=async()=>{
+        if(!resumeFile)return alert("Please select a file")
+        const resumeData=new FormData()
+        resumeData.append('resume', resumeFile)
+        resumeData.append("email", email);
+        try {
+            const res = await fetch("http://localhost:5000/api/upload/upload-resume", {
+                method: "POST",
+                body: resumeData,
+            });
 
+        const data = await res.json();
+        if (res.ok) {
+            setUploadSuccess("Resume uploaded successfully.");
+            // You can navigate or show a preview
+        } else {
+            alert("Upload failed: " + data.message);
+        }
+        } catch (err) {
+            alert("Error: " + err.message);
+        }
+    }
     return (
     <>
         <Navbar />
     <div className="flex flex-col items-center px-4 py-16 min-h-screen bg-gray-100">
     <h1 className="text-5xl font-bold mb-32">How would you like to get started?</h1>
+    {/* resume upload part */}
     <div className="flex flex-col md:flex-row gap-16">
 
         <div className="bg-white rounded-2xl shadow-lg p-10 w-96 h-96 text-xl">
-        <h2 className="text-2xl font-semibold mb-20">Upload Resume</h2>
-        <input
-            type="file"
-            className="block w-full text-lg text-gray-500
-                    file:mr-4 file:py-3 file:px-6
-                    file:rounded-lg file:border-0
-                    file:text-lg file:font-medium
-                    file:bg-gray-100 file:text-gray-700
-                    hover:file:bg-gray-200"
-        />
-        </div>
-
+            <div>
+            <h2 className="text-2xl font-semibold mb-20">Upload Resume</h2>
+            <input
+                type="file"
+                onChange={handleResumeChange}
+                className="block w-full text-lg text-gray-500
+                        file:mr-4 file:py-3 file:px-6
+                        file:rounded-lg file:border-0
+                        file:text-lg file:font-medium
+                        file:bg-gray-100 file:text-gray-700
+                        hover:file:bg-gray-200"
+            />
+            </div>
+            <button
+            onClick={handleResumeUpload}
+            className="bg-black text-white text-lg font-medium rounded-xl py-3 hover:bg-gray-900 w-full mt-4"
+            >
+            Upload
+            </button>
+             {uploadSuccess && (
+              <p className="text-green-600 mt-2 text-sm">{uploadSuccess}</p>
+            )}
+            </div>
         <div className="bg-gray-50 rounded-2xl shadow-lg p-10 w-96 flex flex-col text-xl">
         <h2 className="text-2xl font-semibold mb-32">Fill Form Manually</h2>
         <button

@@ -9,6 +9,12 @@ const userSchema = new mongoose.Schema({
     unique: true,
   },
   password: String,
+  resume: {
+    filename: String,
+    data: Buffer,
+    contentType: String,
+    uploadDate: Date,
+  },
 });
 
 module.exports = mongoose.model("User", userSchema);
