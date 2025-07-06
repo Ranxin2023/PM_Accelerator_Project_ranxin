@@ -44,16 +44,15 @@
 ## Setup
 ### Frontend
 ```bash
-cd client
 npm install
-npm start
+npm run dev
 ```
 
 ### Backend
 ```bash
-cd server
+cd backend
 npm install
-npm start
+npm run dev
 ```
 
 ## Techs
