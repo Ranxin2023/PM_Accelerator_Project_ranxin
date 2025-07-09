@@ -6,7 +6,7 @@ import { useUser } from "../context/UserContext";
 
 export default function Welcome() {
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
+  const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const { setUser } = useUser();
@@ -33,14 +33,14 @@ export default function Welcome() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ userName, password }),
       });
 
       const data = await res.json();
 
       if (res.ok) {
         // console.log("Login successful:", data);
-        setUser({ email:email })
+        setUser({ userName:userName })
         navigate("/preferences");
       } else {
         setError(data.message || "Login failed");
@@ -64,8 +64,8 @@ export default function Welcome() {
           </label>
           <input
             type="text"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={userName}
+            onChange={(e) => setUserName(e.target.value)}
             placeholder="Type your e-mail or phone number"
             className="w-full border border-gray-200 rounded-lg px-4 py-2 bg-gray-100"
           />
