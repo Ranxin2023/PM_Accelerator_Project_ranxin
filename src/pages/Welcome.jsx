@@ -11,6 +11,21 @@ export default function Welcome() {
   const [error, setError] = useState("");
   const { setUser } = useUser();
 
+  /*这里要做一个判断如果不是新用户了就直接去dashboard
+  useEffect(() => {
+  fetch("/api/user-status")
+    .then(res => res.json())
+    .then(data => {
+      if (data.onboardingComplete) {
+        navigate("/dashboard");
+      }
+    })
+    .catch(err => {
+      console.error("Failed to check user status", err);
+    });
+}, []);
+  */
+
   const handleSignIn = async () => {
      try {
       const res = await fetch("http://localhost:5000/api/auth/login", {
@@ -26,7 +41,7 @@ export default function Welcome() {
       if (res.ok) {
         // console.log("Login successful:", data);
         setUser({ email:email })
-        navigate("/select-input-method");
+        navigate("/preferences");
       } else {
         setError(data.message || "Login failed");
       }
