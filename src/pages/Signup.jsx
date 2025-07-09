@@ -6,7 +6,7 @@ export default function Signup() {
   const navigate = useNavigate();
   const [firstName, setFirstName]=useState('')
   const [lastName, setLastName]=useState('')
-  const [email, setEmail]=useState('')
+  const [userName, setUserName]=useState('')
   const [password, setPassword]=useState('')
   const [confirmPassword, setConfirmPassword]=useState('')
   const [error, setError]=useState('')
@@ -23,7 +23,7 @@ export default function Signup() {
         body: JSON.stringify({
           firstName,
           lastName,
-          email,
+          userName,
           password,
         }),
       });
@@ -62,12 +62,12 @@ export default function Signup() {
             className="border border-gray-200 rounded-lg px-4 py-2 bg-gray-100"
           />
         </div>
-        {/* email */}
+        {/* username */}
         <div className="mb-4">
           <input
             type="email"
             placeholder="Email"
-            onChange={(e)=>setEmail(e.target.value)}
+            onChange={(e)=>setUserName(e.target.value)}
             className="w-full border border-gray-200 rounded-lg px-4 py-2 bg-gray-100"
           />
         </div>

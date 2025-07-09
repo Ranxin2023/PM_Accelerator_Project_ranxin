@@ -6,10 +6,10 @@ const User = require('../models/User');
 const router = express.Router();
 // === Signup ===
 router.post("/signup", async (req, res) => {
-  const { firstName, lastName, email, password } = req.body;
+  const { firstName, lastName, userName, password } = req.body;
 
   try {
-    const existingUser = await User.findOne({ email });
+    const existingUser = await User.findOne({ userName });
     if (existingUser)
       return res.status(400).json({ message: "Email already registered." });
 
@@ -18,7 +18,7 @@ router.post("/signup", async (req, res) => {
     const newUser = new User({
       firstName,
       lastName,
-      email,
+      userName,
       password: hashedPassword,
     });
 
@@ -31,10 +31,10 @@ router.post("/signup", async (req, res) => {
 
 // Login route
 router.post('/login', async (req, res) => {
-  const { email, password } = req.body;
+  const { userName, password } = req.body;
 
   try {
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ userName });
 
     if (!user) return res.status(404).json({ message: 'User not found' });
 
