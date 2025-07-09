@@ -8,8 +8,14 @@ import Welcome from './pages/Welcome.jsx'
 import Signup from './pages/Signup.jsx'
 import ForgotPassword from './pages/ForgotPassword.jsx'
 import SelectInputMethod from './pages/SelectInputMethod.jsx'
-import ManuallyStep1 from './pages/ManuallyFill/step1.jsx'
+import Preferences from "./pages/Preferences";
+import ResumeForm from './pages/ResumeForm.jsx';
+import ManuallyFill from './pages/ResumeManual.jsx';
+import Dashboard from './pages/Dashboard.jsx';
+import GenerateAnswers from './pages/GenerateAnswers.jsx';
+import ResumeScore from './pages/ResumeScore.jsx';
 import './index.css'
+
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -22,7 +28,12 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Route path="/signup" element={<Signup />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/select-input-method" element={<SelectInputMethod />} />
-        <Route path="/manually-fill-step1" element={<ManuallyStep1 />} />
+        <Route path="/preferences" element={<Preferences />} />    
+        <Route path="/resume/form" element={<ResumeForm />} />
+        <Route path="/manually-fill" element={<ManuallyFill />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/auto-answer" element={<GenerateAnswers />} />
+        <Route path="/resume-score" element={<ResumeScore />} />
       </Routes>
     </UserProvider>
 

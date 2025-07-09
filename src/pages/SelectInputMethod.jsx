@@ -24,7 +24,7 @@ export default function SelectInputMethod() {
         resumeData.append('resume', resumeFile)
         resumeData.append("email", email);
         try {
-            const res = await fetch("http://localhost:5000/api/upload/upload-resume", {
+            const res = await fetch("http:/localhost:5000/api/upload/upload-resume", {
                 method: "POST",
                 body: resumeData,
             });
@@ -32,6 +32,7 @@ export default function SelectInputMethod() {
         const data = await res.json();
         if (res.ok) {
             setUploadSuccess("Resume uploaded successfully.");
+            navigate("/resume/form", { state: data }); 
             // You can navigate or show a preview
         } else {
             alert("Upload failed: " + data.message);
@@ -75,7 +76,7 @@ export default function SelectInputMethod() {
         <div className="bg-gray-50 rounded-2xl shadow-lg p-10 w-96 flex flex-col text-xl">
         <h2 className="text-2xl font-semibold mb-32">Fill Form Manually</h2>
         <button
-            onClick={() => navigate("/manually-fill-step1")}
+            onClick={() => navigate("/manually-fill")}
             className="bg-black text-white text-lg font-medium rounded-xl py-3 hover:bg-gray-900"
         >
             Continue
