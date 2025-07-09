@@ -14,6 +14,8 @@ import ManuallyFill from './pages/ResumeManual.jsx';
 import Dashboard from './pages/Dashboard.jsx';
 import GenerateAnswers from './pages/GenerateAnswers.jsx';
 import ResumeScore from './pages/ResumeScore.jsx';
+import JobApplicationPage from './pages/JobApplicationPage.jsx';
+import Forum from './pages/Forum.jsx';
 import './index.css'
 
 
@@ -34,6 +36,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/auto-answer" element={<GenerateAnswers />} />
         <Route path="/resume-score" element={<ResumeScore />} />
+        <Route path="/tracker" element={<JobApplicationPage />} />
+        <Route path="/forum" element={<Forum />} />
       </Routes>
     </UserProvider>
 
