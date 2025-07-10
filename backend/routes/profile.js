@@ -43,7 +43,13 @@ router.post("/save-profile-details", async (req, res) => {
   try {
     const updatedUser = await User.findOneAndUpdate(
       { userName },
-      { education, experience, publications },
+      {
+        $set: {
+          education: education || [],
+          experience: experience || [],
+          publications: publications || [],
+        },
+      },
       { new: true }
     );
 
