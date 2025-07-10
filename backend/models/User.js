@@ -1,4 +1,3 @@
-
 const mongoose = require("mongoose");
 
 const educationSchema = new mongoose.Schema({
@@ -14,7 +13,10 @@ const experienceSchema = new mongoose.Schema({
   company: String,
   startDate: String,
   endDate: String,
-  description: String,
+  description: {
+    type: [String],
+    default: [],
+  },
 });
 
 const publicationSchema = new mongoose.Schema({

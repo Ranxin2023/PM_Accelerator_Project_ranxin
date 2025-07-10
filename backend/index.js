@@ -17,7 +17,7 @@ app.use('/api/profile', require('./routes/autofill'));
 app.use('/api/upload', require('./routes/upload'));
 // app.use('/api/resume', require('./routes/score'));
 // app.use('/api/answers', require('./routes/answers'));
-app.use('/api/applications', require('./routes/dashboard'));
+app.use('/api/applications', require('./routes/applications'));
 app.use('/api/manuallyfill', require('./routes/manuallyfill'));
 app.use('/api/profile', require('./routes/profile'));
 app.use('/api/preference', require('./routes/preference'));

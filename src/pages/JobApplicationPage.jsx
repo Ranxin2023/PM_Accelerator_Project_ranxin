@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useUser } from "../context/UserContext";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { ChevronDown } from "lucide-react";
@@ -9,10 +10,56 @@ const JobApplicationPage = () => {
   const [jobs, setJobs] = useState([]);
   const [selectedJobIndex, setSelectedJobIndex] = useState(null);
   const navigate = useNavigate();
+  const { user } = useUser();
 
+  useEffect(() => {
+    if (!user) {
+      navigate("/");
+      return;
+    }
 
-  const handleSave = (job) => {
-    setJobs([...jobs, job]);
+    const fetchJobs = async () => {
+      try {
+        const res = await fetch(`http://localhost:5000/api/applications/${user.userName}`);
+        const data = await res.json();
+        if (res.ok) {
+          setJobs(data);
+        } else {
+          console.error("Failed to fetch jobs:", data.message);
+        }
+      } catch (err) {
+        console.error("Error fetching jobs:", err);
+      }
+    };
+
+    fetchJobs();
+  }, [user, navigate]);
+
+  const handleSave = async (job) => {
+    try {
+      const jobWithUser = {
+        ...job,
+        userName: user.userName,
+      };
+
+      const res = await fetch("http://localhost:5000/api/applications", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(jobWithUser),
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        setJobs([...jobs, data]);
+        setShowModal(false);
+      } else {
+        alert("Failed to save job: " + data.message);
+      }
+    } catch (err) {
+      alert("Error saving job: " + err.message);
+    }
   };
 
   const selectedJob = selectedJobIndex !== null ? jobs[selectedJobIndex] : null;

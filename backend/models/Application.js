@@ -1,10 +1,21 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-const ApplicationSchema = new mongoose.Schema({
-  userId: mongoose.Schema.Types.ObjectId,
+const applicationSchema = new mongoose.Schema({
+  title: String,
   company: String,
-  jobTitle: String,
-  status: String // e.g., 'Submitted', 'Interview', 'Rejected'
+  location: String,
+  salary: String,
+  type: String,
+  status: String,
+  description: String,
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+  },
 });
 
-module.exports = mongoose.model('Application', ApplicationSchema);
+module.exports = mongoose.model("Applications", applicationSchema);
