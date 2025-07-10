@@ -56,7 +56,7 @@ const levelOptions = [
 export default function PreferencesFlow() {
   const { user } = useUser();
   const navigate = useNavigate();
-  const email = user?.email;
+  const userName = user?.userName;
 
   const [step, setStep] = useState(1);
   const [selectedValues, setSelectedValues] = useState([]);
@@ -65,7 +65,26 @@ export default function PreferencesFlow() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    if (!user) navigate("/");
+    if (!user) {
+      navigate("/");
+      return;
+    }
+
+    const fetchPreferences = async () => {
+      try {
+        const res = await fetch(`http://127.0.0.1:5000/api/preference/${user.userName}`);
+        if (!res.ok) throw new Error("Failed to fetch preferences");
+        const data = await res.json();
+
+        if (data.preferences) {
+          setSelectedValues(data.preferences);
+        }
+      } catch (err) {
+        console.error("Error loading preferences:", err);
+      }
+    };
+
+    fetchPreferences();
   }, [user, navigate]);
 
   const toggle = (value, selected, setSelected, max) => {
@@ -79,29 +98,54 @@ export default function PreferencesFlow() {
     }
   };
 
-  const handleStep1Continue = async () => {
-    const res = await fetch("http://127.0.0.1:5000/api/manuallyfill/step1", {
+ const handleStep1Continue = async () => {
+  const res = await fetch("http://127.0.0.1:5000/api/preference", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ userName, preferences: selectedValues }),
+  });
+
+  if (res.ok) {
+    setStep(2);
+  } else {
+    setError("Submission failed");
+  }
+};
+
+  
+  const handleStep2Continue = async () => {
+  const res = await fetch("http://127.0.0.1:5000/api/preference", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ userName, interestedRoles: selectedRoles }),
+  });
+
+  if (res.ok) {
+    setStep(3);
+  } else {
+    setError("Submission failed");
+  }
+}
+
+
+  const handleFinalContinue = async () => {
+  try {
+    const res = await fetch("http://127.0.0.1:5000/api/preference/levels", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, values: selectedValues }),
+      body: JSON.stringify({ userName, levels: selectedLevels }),
     });
+
     if (res.ok) {
-      setStep(2);
+      navigate("/select-input-method");
     } else {
-      setError("Submission failed");
+      setError("Failed to save levels.");
     }
-  };
-
-  //这两个要改
-  const handleStep2Continue = () => {
-    setStep(3);
-  };
-
-
-  const handleFinalContinue = () => {
-    console.log("Selected levels:", selectedLevels);
-    navigate("/select-input-method"); 
-  };
+  } catch (err) {
+    console.error(err);
+    setError("Error saving levels.");
+  }
+};
 
   return (
     <>

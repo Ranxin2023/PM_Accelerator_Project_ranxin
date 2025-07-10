@@ -18,8 +18,23 @@ const userSchema = new mongoose.Schema({
     uploadDate: Date,
   },
 
-  preferences: [String],
+   // Step 1: preferences
+  preferences: {
+    type: [String],
+    default: [],
+  },
 
+  // Step 2: interested roles
+  interestedRoles: {
+    type: [String],
+    default: [],
+  },
+
+  // Step 3: interested levels
+  interestedLevels: {
+    type: [String],
+    default: [],
+  },
   education: [
     {
       school: String,

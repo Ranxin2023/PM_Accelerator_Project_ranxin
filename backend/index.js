@@ -20,6 +20,7 @@ app.use('/api/upload', require('./routes/upload'));
 app.use('/api/applications', require('./routes/dashboard'));
 app.use('/api/manuallyfill', require('./routes/manuallyfill'));
 app.use('/api/profile', require('./routes/profile'));
+app.use('/api/preference', require('./routes/preference'));
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
