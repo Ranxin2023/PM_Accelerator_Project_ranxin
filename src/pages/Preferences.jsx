@@ -76,9 +76,9 @@ export default function PreferencesFlow() {
         if (!res.ok) throw new Error("Failed to fetch preferences");
         const data = await res.json();
 
-        if (data.preferences) {
-          setSelectedValues(data.preferences);
-        }
+        if (data.preferences) setSelectedValues(data.preferences);
+        if (data.interestedRoles) setSelectedRoles(data.interestedRoles);
+        if (data.interestedLevels) setSelectedLevels(data.interestedLevels);
       } catch (err) {
         console.error("Error loading preferences:", err);
       }
