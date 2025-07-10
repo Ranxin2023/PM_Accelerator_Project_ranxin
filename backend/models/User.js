@@ -28,12 +28,20 @@ const publicationSchema = new mongoose.Schema({
 });
 
 const userSchema = new mongoose.Schema({
-  email: String,
-  userName: String,
+  userName: {
+    type: String,
+    required: true,
+    unique: true,
+    trim: true,
+  },
+  password: {
+    type: String,
+    required: true,
+  },
   firstName: String,
   lastName: String,
   phone: String,
-  resumeEmail: String,
+  email: String,
   resume: {
     filename: String,
     data: Buffer,
