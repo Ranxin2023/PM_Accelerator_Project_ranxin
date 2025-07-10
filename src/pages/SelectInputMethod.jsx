@@ -14,7 +14,7 @@ export default function SelectInputMethod() {
         }
     }, [user, navigate]);
 
-    const email = user?.email;
+    const userName = user?.userName;
     const handleResumeChange=(e)=>{
         setResumeFile(e.target.files[0])
     }
@@ -22,9 +22,9 @@ export default function SelectInputMethod() {
         if(!resumeFile)return alert("Please select a file")
         const resumeData=new FormData()
         resumeData.append('resume', resumeFile)
-        resumeData.append("email", email);
+        resumeData.append("userName", userName);
         try {
-            const res = await fetch("http:/localhost:5000/api/upload/upload-resume", {
+            const res = await fetch("http://localhost:5000/api/upload/upload-resume", {
                 method: "POST",
                 body: resumeData,
             });

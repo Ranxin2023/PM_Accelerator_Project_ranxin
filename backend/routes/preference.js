@@ -49,22 +49,28 @@ router.post('/roles', async (req, res) => {
     res.status(500).json({ error: "Server error" });
   }
 });
+// GET /api/preference/:userName
 router.get("/:userName", async (req, res) => {
   const { userName } = req.params;
 
   try {
     const user = await User.findOne({ userName });
+
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
 
-    const { preferences, interestedRoles, desiredLevels } = user;
-    res.status(200).json({ preferences, interestedRoles, desiredLevels });
+    const preferences = user.preferences || [];
+    const interestedRoles = user.interestedRoles || [];
+    const interestedLevels = user.interestedLevels || [];
+
+    res.status(200).json({ preferences, interestedRoles, interestedLevels });
   } catch (error) {
-    console.error(error);
+    console.error("Error fetching user preferences:", error);
     res.status(500).json({ error: "Server error" });
   }
 });
+
 // POST /api/preference/levels
 router.post("/levels", async (req, res) => {
   const { userName, levels } = req.body;
