@@ -5,6 +5,7 @@ const User = require("../models/User");
 // Save Step 1 (basic profile info)
 router.post("/save-basic-info", async (req, res) => {
   const { userName, firstName, lastName, email, phone } = req.body;
+  // console.log("Saving basic info...")
 
   if (!userName) return res.status(400).json({ message: "Missing userName for identification." });
 
