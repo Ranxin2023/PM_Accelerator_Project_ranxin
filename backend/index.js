@@ -15,7 +15,7 @@ mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopol
 // Routes
 app.use('/api/analyze', require('./routes/analyze'));
 app.use('/api/auth', require('./routes/auth'));
-app.use('/api/profile', require('./routes/autofill'));
+// app.use('/api/profile', require('./routes/autofill'));
 app.use('/api/answers', require('./routes/answers'));
 app.use('/api/applications', require('./routes/applications'));
 app.use('/api/forum', require('./routes/forum'));

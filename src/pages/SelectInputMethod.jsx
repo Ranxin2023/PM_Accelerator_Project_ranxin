@@ -32,7 +32,7 @@ export default function SelectInputMethod() {
         const data = await res.json();
         if (res.ok) {
             setUploadSuccess("Resume uploaded successfully.");
-            navigate("/resume/form", { state: data }); 
+            navigate("/dashboard", { state: data }); 
             // You can navigate or show a preview
         } else {
             alert("Upload failed: " + data.message);
