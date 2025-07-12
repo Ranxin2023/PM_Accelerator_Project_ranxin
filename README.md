@@ -167,3 +167,7 @@ backend/
 └── package-lock.json
 
 ```
+
+## Contributors:
+- Ranxin Li
+- Zhijiang Xiong
