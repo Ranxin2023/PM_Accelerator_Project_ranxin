@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { ChevronDown, Search, ArrowRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-
+import { useUser } from "../context/UserContext";
 const ForumPage = () => {
   const [questions, setQuestions] = useState([]);
   const [selectedPostIndex, setSelectedPostIndex] = useState(null);
@@ -12,30 +12,63 @@ const ForumPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [sortOption, setSortOption] = useState("newest");
+  const { user } = useUser();
   const navigate = useNavigate();
-
-  const handleAddQuestion = () => {
+  useEffect(() => {
+          if (!user) {
+          //   alert("Please sign in to continue.");
+          navigate("/");
+          }
+      }, [user, navigate]);
+  const fetchQuestions = async () => {
+      const res = await fetch(`http://localhost:5000/api/forum?sort=${sortOption}`);
+      const data = await res.json();
+      setQuestions(data);
+  };
+  const userName = user?.userName;
+  useEffect(() => {
+    fetchQuestions();
+  }, [sortOption]);
+  const handleAddQuestion = async () => {
     if (!newQuestion.trim()) return;
-    setQuestions([
-      { title: newQuestion, answers: 0, replies: [], likes: 0 },
-      ...questions
-    ]);
+
+    const res = await fetch("http://localhost:5000/api/forum", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ title: newQuestion }),
+    });
+    const data = await res.json();
+    setQuestions([data, ...questions]);
     setNewQuestion("");
     setShowModal(false);
+    fetchQuestions();
   };
+ const handleAddAnswer = async () => {
+  if (selectedPostIndex === null || !newAnswer.trim()) return;
 
-  const handleAddAnswer = () => {
-    if (selectedPostIndex === null || !newAnswer.trim()) return;
-    const updated = [...questions];
-    updated[selectedPostIndex].replies.push({
-      user: "anonymous",
-      text: newAnswer,
-      time: "just now"
+  const questionId = questions[selectedPostIndex]._id;
+  
+
+  try {
+    const res = await fetch(`http://localhost:5000/api/forum/${questionId}/answer`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text: newAnswer, userName:userName }),
     });
-    updated[selectedPostIndex].answers++;
-    setQuestions(updated);
+    const updated = await res.json();
+
+    // Update that question in state
+    const updatedList = [...questions];
+    updatedList[selectedPostIndex] = updated;
+    setQuestions(updatedList);
     setNewAnswer("");
-  };
+    fetchQuestions();
+  } catch (err) {
+    console.error("Failed to post answer:", err);
+  }
+};
+
+
 
   const filteredQuestions = questions.filter((q) =>
     q.title.toLowerCase().includes(searchTerm.toLowerCase())

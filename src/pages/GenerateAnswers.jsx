@@ -32,13 +32,13 @@ const GenerateAnswers = () => {
 
       if (res.ok) {
         setResponse(data.answer);
-        console.log(`Answer generated, ${data.answer}`);
+        // console.log(`Answer generated, ${data.answer}`);
       } else {
-        console.log("❌ Generated Failed");
+        // console.log("❌ Generated Failed");
         setResponse(`❌ Failed: ${data.message || "Unknown error"}`);
       }
     } catch (error) {
-      console.error("Error calling DeepSeek backend:", error);
+      // console.error("Error calling DeepSeek backend:", error);
       setResponse("❌ Error generating answer. Please try again.");
     }
   };
