@@ -57,90 +57,113 @@ npm run dev
 
 ## Techs
 ### Frontend
-Built using **React (Create React App)**. It collects user input, interacts with the backend, and renders AI results.
-- **React+jsx**:
-- **React Router DOM**:
-- **State Management**: useState, useEffect for form handling and async data.
-- **Form Components**:  Collects user profile, resumes, job descriptions.
-- **Axios**:
-- **Agentic UX**:
-- **Pages**:
+| Technology            | How It's Used                                                                                         |
+| --------------------- | ----------------------------------------------------------------------------------------------------- |
+| **React**             | Core framework used to build reusable UI components (`App.jsx`, pages under `src/pages/`)             |
+| **Vite**              | Fast build tool for local dev server, HMR, and optimized builds (`vite.config.js`)                    |
+| **Tailwind CSS**      | Utility-first CSS used for styling all components (`App.css`, `index.css`, JSX class names)           |
+| **React Router DOM**  | Handles page routing and navigation between views (`useNavigate`, `<Route>`, `<Link>`)                |
+| **React Context API** | Global state management used via `useContext` to share auth state, preferences, or user info globally |
+| **FormData API**      | Used in `ResumeScore.jsx` to send multipart form data (resume file + job description) to the backend  |
+| **Fetch API**         | Makes HTTP requests to backend REST APIs for posting questions, analyzing resumes, etc.               |
+| **HTML/CSS**          | Used in static files (`public/` folder), `index.html`, and in JSX for layout and semantic structure   |
+| **localStorage**      | Stores user tokens, preferences, and temporary state like resume uploads between page reloads         |
+| **useNavigate**       | Redirects users to different pages after events like login/signup or posting answers                  |
+| **useContext**        | Shares state such as user authentication and preferences across components                            |
 
 ### Backend
-- **Express.js**
-- **Body-parser / JSON Middleware**:
-- **MongoDB + Mongoose**:
-- **dotenv**:
-- **Route Controllers**:
-    - `POST /api/resume/analyze`:
-    - 
-- **Tools**:
-### AI Agent
-- **LLM Integration**:
-    - Uses `fetch` or `axios` to call Azure-hosted DeepSeek APIs.
-    - Authenticated with Azure API key and endpoint.
-- **Prompt Engineering**:
-    - All inputs are wrapped in structured prompts like:
-        > "Compare the following resume with this job description. Return a JSON object with a match_score and 3 improvement suggestions."
-- **Output Format**:
-    - Structured **Json**:
-    ```json
-     {
-        "match_score": 85,
-        "suggestions": [
-        "Add keywords like 'React' and 'Node.js'",
-        "Include quantifiable achievements",
-        "Tailor summary to match the JD tone"
-        ]
-    }
-    ```
+| Technology             | How It's Used                                                                                                    |
+| ---------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| **Node.js**            | JavaScript runtime used to run the Express server (`backend/index.js`)                                           |
+| **Express.js**         | Web framework for defining all RESTful API endpoints (`routes/`)                                                 |
+| **MongoDB**            | Stores all persistent data: users, forum posts, answers, resume analysis logs                                    |
+| **Mongoose**           | Defines schemas and interacts with MongoDB (e.g., `User.js`, `Question.js`, `Application.js`)                    |
+| **Multer**             | Handles file uploads, particularly resumes (`upload.single("resume")` in `analyze.js`)                           |
+| **pdf-parse**          | Parses uploaded resumes (PDF) and extracts raw text for GPT analysis                                             |
+| **OpenAI API**         | Used in `analyze.js` and `answers.js` to send resume + job description or answer custom questions to GPT model (e.g., `gpt-4o-mini`) and receive match score |
+| **dotenv**             | Loads environment variables (e.g., `OPENAI_API_KEY`) from `.env` into `process.env`                              |
+| **CORS**               | Allows cross-origin requests between frontend (`localhost:5173`) and backend (`localhost:5000`)                  |
+| **bcrypt**             | Used in `auth.js` to hash passwords before saving them to the database                                           |
+
 
 ## Project Structure
 ### frontend
 ```
-src/
+├── public/
+│   ├── appstore.png
+│   ├── favicon.ico
+│   ├── googleplay.png
+│   ├── logo192.png
+│   ├── logo512.png
+│   ├── manifest.json
+│   └── robots.txt
 │
-├── components/             # Reusable UI components
-│   ├── AuthLeftPanel.jsx   # Left panel for auth screens (Signup/Login)
-│   └── Navbar.jsx          # Top navigation bar
+├── src/
+│   ├── components/           # Reusable UI components
+│   ├── context/              # Context API providers and global state
+│   └── pages/                # Page-level components / routes
+│       ├── Dashboard.jsx
+│       ├── ForgotPassword.jsx
+│       ├── Forum.jsx
+│       ├── GenerateAnswers.jsx
+│       ├── HomePage.jsx
+│       ├── JobApplicationPage.jsx
+│       ├── Preferences.jsx
+│       ├── ResumeForm.jsx
+│       ├── ResumeManual.jsx
+│       ├── ResumeScore.jsx
+│       ├── SelectInputMethod.jsx
+│       ├── Signup.jsx
+│       └── Welcome.jsx
 │
-├── context/                # Global React Contexts
-│   └── UserContext.jsx     # User state context for login/session
+├── App.jsx                   # Main app wrapper with routing
+├── App.css                   # Global styles
+├── App.test.js               # Basic test file
+├── index.css                 # Entry stylesheet
+├── index.html                # HTML template
+├── main.jsx                  # React entry point
+├── reportWebVitals.js        # Performance metrics
+├── setupTests.js             # Test setup
 │
-├── pages/                  # Top-level route views
-│   ├── ManuallyFill/       # Multi-step manual form input pages
-│   │   └── step1.jsx        # Step 1: Role preference selection
-│   ├── ForgotPassword.jsx  # Forgot password page
-│   ├── HomePage.jsx        # Main dashboard/homepage after login
-│   ├── SelectInputMethod.jsx # User picks upload vs manual form
-│   ├── Signup.jsx          # Signup form
-│   └── Welcome.jsx         # Welcome/Login screen
-│
-├── App.jsx                 # Root component, defines router layout
-├── App.css                 # Global CSS
-├── index.css               # Tailwind or reset styles
-├── main.jsx                # Entry point, ReactDOM render logic
-├── logo.svg                # App logo
-├── reportWebVitals.js      # Performance monitoring (optional)
-├── setupTests.js           # Test setup file for Jest/React Testing Library
-└── App.test.js             # App-level unit test (sample)
+├── .env                      # Environment variables
+├── .gitignore
+├── eslint.config.js
+├── package.json
+├── package-lock.json
+├── tailwind.config.js
+├── postcss.config.js
+├── vite.config.js            # Vite build configuration
+├── README.md
+└── old_package.txt           # (Possibly backup or archived config)
+
 
 ```
 ### backend
 ```
 backend/
-├── routes/
-│   ├── autofill.js
-│   ├── answers.js
-│   └── dashboard.js
-│   ├── manuallyfill.js
-│   ├── score.js
-│   └── upload.js
-├── models/
-│   ├── User.js
-│   └── Application.js
-├── index.js
-├── .env
-└── ai/
-    └── deepseek.js
+│
+├── models/                 # Mongoose schemas
+│   ├── Application.js      # Job application model
+│   ├── Question.js         # Forum Q&A schema
+│   └── User.js             # User schema
+│
+├── routes/                 # API route handlers
+│   ├── analyze.js          # Resume analysis with OpenAI API
+│   ├── answers.js          # Post and manage answers to forum questions
+│   ├── applications.js     # Job application endpoints
+│   ├── auth.js             # Authentication endpoints (login/signup)
+│   ├── autofill.js         # Resume autofill logic
+│   ├── dashboard.js        # Dashboard-related endpoints
+│   ├── forum.js            # Post and fetch forum questions
+│   ├── manuallyfill.js     # Manual resume entry endpoints
+│   ├── preference.js       # User job preference endpoints
+│   ├── profile.js          # User profile updates
+│   └── upload.js           # Resume upload handling (Multer + OpenAI)
+│
+├── uploads/                # Temporary storage for uploaded resumes
+│
+├── index.js                # Entry point for Express server
+├── package.json
+└── package-lock.json
+
 ```
