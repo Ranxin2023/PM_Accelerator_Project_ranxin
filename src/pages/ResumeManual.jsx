@@ -59,41 +59,54 @@ const ManuallyFill = () => {
     updatedArray[idx][key] = value;
     setForm({ ...form, [section]: updatedArray });
   };
-  /*这里是因为后面dashboard的edit board也要用这个页面
+  
   useEffect(() => {
-  fetch("/api/user-profile")
-    .then((res) => {
-      if (!res.ok) {
-        return {
-          firstName: "",
-          lastName: "",
-          email: "",
-          phone: "",
-          education: [],
-          experience: [],
-          publications: []
-        };
+  const fetchProfile = async () => {
+    try {
+      const res = await fetch(`http://localhost:5000/api/profile/get-profile?userName=${encodeURIComponent(userName)}`);
+      const data = await res.json();
+
+      if (res.ok) {
+        setForm({
+          firstName: data.firstName || "",
+          lastName: data.lastName || "",
+          email: data.email || "",
+          phone: data.phone || "",
+          education: data.education?.length ? data.education : [{
+            school: "",
+            degree: "",
+            startDate: "",
+            endDate: "",
+            gpa: ""
+          }],
+          experience: data.experience?.length ? data.experience : [{
+            title: "",
+            company: "",
+            startDate: "",
+            endDate: "",
+            description: []
+          }],
+          publications: data.publications?.length ? data.publications : [{
+            title: "",
+            authors: "",
+            venue: "",
+            year: "",
+            pages: ""
+          }]
+        });
+      } else {
+        console.error("Failed to load profile:", data.message);
       }
-      return res.json();
-    })
-    .then((data) => {
-      setForm(data);
-    })
-    .catch((err) => {
-      console.error("Failed to load profile", err);
-    });
-}, []);
-
-  const handleChange = (section, idx, key, value) => {
-    const updated = [...form[section]];
-    updated[idx][key] = value;
-    setForm({ ...form, [section]: updated });
+    } catch (err) {
+      console.error("Error loading profile:", err.message);
+    }
   };
 
-  const addEntry = (section, emptyTemplate) => {
-    setForm({ ...form, [section]: [...form[section], emptyTemplate] });
-  };
-  */
+  if (userName) {
+    fetchProfile();
+  }
+}, [userName]);
+
  const handleStep1Next=async()=>{
   try {
       const res = await fetch("http://localhost:5000/api/profile/save-basic-info", {

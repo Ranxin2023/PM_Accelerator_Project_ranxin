@@ -64,5 +64,10 @@ router.post("/save-profile-details", async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 });
-
+router.get("/get-profile", async (req, res) => {
+  const { userName } = req.query;
+  const user = await User.findOne({ userName});
+  if (!user) return res.status(404).json({ message: "Profile not found" });
+  res.status(200).json(user);
+});
 module.exports = router;
