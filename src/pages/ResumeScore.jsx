@@ -7,26 +7,25 @@ const ResumeScore = () => {
   const navigate = useNavigate();
   const [jobDesc, setJobDesc] = useState("");
   const [resumeFile, setResumeFile] = useState(null);
-  const [analysisResults, setAnalysisResults] = useState([]);
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [analysisText, setAnalysisText] = useState("");
 
   const handleAnalyze = async () => {
     if (!resumeFile || !jobDesc) return;
 
     const formData = new FormData();
     formData.append("resume", resumeFile);
-    formData.append("jobDesc", jobDesc);
+    formData.append("jobDescription", jobDesc); // match backend key
 
     try {
-      const res = await fetch("/api/analyze-resume", {
+      const res = await fetch("http://localhost:5000/api/analyze/analyze-resume", {
         method: "POST",
         body: formData,
       });
       const data = await res.json();
-      setAnalysisResults(data.results || []);
-      setCurrentIndex(0);
+      setAnalysisText(data.analysis || "No analysis received.");
     } catch (error) {
       console.error("Analysis failed:", error);
+      setAnalysisText("Error occurred while analyzing resume.");
     }
   };
 
@@ -46,11 +45,9 @@ const ResumeScore = () => {
     e.preventDefault();
   };
 
-  const handleCopy = (text) => {
-    navigator.clipboard.writeText(text);
+  const handleCopy = () => {
+    navigator.clipboard.writeText(analysisText);
   };
-
-  const analysisResult = analysisResults[currentIndex];
 
   return (
     <>
@@ -84,6 +81,7 @@ const ResumeScore = () => {
               />
             </div>
           </div>
+
           <div className="bg-gray-50 p-6 rounded-xl shadow-sm">
             <h2 className="font-semibold mb-1">Job Details</h2>
             <p className="text-sm text-gray-500 mb-4">Paste job description here...</p>
@@ -105,64 +103,17 @@ const ResumeScore = () => {
           </button>
         </div>
 
-        {analysisResult && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="bg-white p-6 rounded-xl border shadow-sm">
-              <h3 className="text-lg font-semibold mb-4">Match Score:</h3>
-              {analysisResult.score && (
-                <div className="text-2xl mb-4">{analysisResult.score}</div>
-              )}
+        {analysisText && (
+          <div className="bg-white p-6 rounded-xl border shadow-sm max-w-4xl mx-auto">
+            <h3 className="text-lg font-semibold mb-4">Analysis Result:</h3>
+            <pre className="whitespace-pre-wrap text-sm text-gray-800">{analysisText}</pre>
 
-              <p className="font-medium mb-1">+ Matched skills:</p>
-              <p className="text-sm text-gray-700 mb-4">{analysisResult.matchedSkills?.join(", ")}</p>
-
-              <p className="font-medium mb-1">+ Missing Keywords:</p>
-              <p className="text-sm text-gray-700 mb-4">{analysisResult.missingKeywords?.join(", ")}</p>
-
-              <p className="font-medium mb-1">+ Suggestions:</p>
-              <ul className="text-sm text-gray-700 list-disc list-inside">
-                {analysisResult.suggestions?.map((s, i) => <li key={i}>{s}</li>)}
-              </ul>
-            </div>
-
-            <div className="bg-white p-6 rounded-xl border shadow-sm relative">
-              <h3 className="text-lg font-semibold mb-4">We’ve updated your Experience section!</h3>
-              <p className="font-semibold text-sm mb-2">BEFORE</p>
-              <ul className="text-sm text-gray-700 list-disc list-inside mb-4">
-                {analysisResult.before?.map((item, i) => <li key={i}>{item}</li>)}
-              </ul>
-
-              <p className="font-semibold text-sm mb-2">AFTER</p>
-              <ul className="text-sm text-gray-700 list-disc list-inside mb-4">
-                {analysisResult.after?.map((item, i) => <li key={i}>{item}</li>)}
-              </ul>
-
-              <button
-                onClick={() => handleCopy(analysisResult.after?.join("\n"))}
-                className="absolute bottom-4 right-4 bg-black text-white px-4 py-2 rounded-full text-sm hover:bg-gray-900 transition"
-              >
-                Copy
-              </button>
-
-              {analysisResults.length > 1 && (
-                <div className="absolute top-4 right-4 flex items-center gap-2">
-                  <button
-                    onClick={() => setCurrentIndex((prev) => Math.max(0, prev - 1))}
-                    disabled={currentIndex === 0}
-                    className="text-xl px-2"
-                  >
-                    ←
-                  </button>
-                  <button
-                    onClick={() => setCurrentIndex((prev) => Math.min(analysisResults.length - 1, prev + 1))}
-                    disabled={currentIndex === analysisResults.length - 1}
-                    className="text-xl px-2"
-                  >
-                    →
-                  </button>
-                </div>
-              )}
-            </div>
+            <button
+              onClick={handleCopy}
+              className="mt-4 bg-black text-white px-4 py-2 rounded-full text-sm hover:bg-gray-900 transition"
+            >
+              Copy
+            </button>
           </div>
         )}
       </div>

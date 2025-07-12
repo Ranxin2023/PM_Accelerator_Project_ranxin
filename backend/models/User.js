@@ -50,7 +50,7 @@ const userSchema = new mongoose.Schema({
   },
   preferences: [String],
   interestedRoles: [String],
-  desiredLevels: [String],
+  interestedLevels: [String],
   education: [educationSchema],
   experience: [experienceSchema],
   publications: [publicationSchema],
